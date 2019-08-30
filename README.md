@@ -5,7 +5,15 @@ DO NOT RUN, lol. Still testing it out.
 
 MAC ONLY!
 
-This grabs a Tor docker container - the nifty little one at:
+While checking out Jessie's nifty Linux docker Tor thing at -
+
+    https://blog.jessfraz.com/post/routing-traffic-through-tor-docker-container/
+
+I was internally lamenting how nothing works at all on a mac with
+networking and docker. But....
+
+
+This attempts to grab a Tor docker container - the nifty little one at:
 
     https://github.com/rdsubhas/docker-tor-privoxy-alpine
 

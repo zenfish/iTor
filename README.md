@@ -3,7 +3,10 @@ A script - FOR MACs ONLY - that fires up Tor in a docker container, deals with d
 
 DO NOT RUN, lol. Still testing it out.
 
-MAC ONLY!
+If you do all that is needed is -
+
+    ./iTor.sh
+
 
 While checking out Jessie's nifty Linux docker Tor thing at -
 

@@ -182,9 +182,17 @@ fi
 echo
 echo FINALLY - setting sox proxy for BROWSERs in the System Settings
 echo
-echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
+# echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
+#
+#
+#
+INT=$(networksetup -listallnetworkservices | awk '!/\*/ {print $0; exit}')
 echo
-networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
+echo For interface: $INT
+echo
+echo
+# networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
+networksetup -setsocksfirewallproxy "$INT" localhost "$dtor_sox_outside"
 
 echo To stop using Tor et al, stop the running docker container:
 echo 
@@ -200,7 +208,8 @@ echo -e "\trm $PFCTL"
 echo
 echo And finally kill off the socks network System Preferences
 echo
-echo -e "\tnetworksetup -setsocksfirewallproxystate $HW off"
+# echo -e "\tnetworksetup -setsocksfirewallproxystate $HW off"
+echo -e "\tnetworksetup -setsocksfirewallproxystate "$INT" off"
 echo
 echo "good luck!"
 echo

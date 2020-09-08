@@ -2,6 +2,9 @@
 #
 # fire up tor docker container, create an ipctl conf file for docker tor stuff, and rock 'n' roll
 #
+# Create a docker web tor proxy on port 5080
+#
+#
 
 # container name
 dtor_name="rdsubhas/tor-privoxy-alpine"
@@ -47,7 +50,6 @@ fi
 # save some typing
 #
 function errz () {
-
     problem=$1
     var=$1
 
@@ -72,6 +74,8 @@ errz "The interface to the internet" $INTERFACE
 
 # find the HW interface name associated with the interface we're using
 HW=$(networksetup -listallhardwareports | awk '/Port/ { split($0, p, ":"); hw = p[2] } /Device/ { if ($2 == "'"$INTERFACE"'") print hw }' | sed 's/^ *//')
+
+# echo HW: $HW
 
 errz "Hardware interface name" $HW
 
@@ -165,7 +169,9 @@ sudo pfctl -e &> /dev/null
 cat "$PFCTL" | sudo pfctl -e -f - &> /dev/null
 
 echo ""
-echo "... if the gods are feeling benign... traffic sent to port $tor_server:$pfctl_to_docker (web) or $tor_server:$pfctl_to_docker   should go through tor... trying to test -"
+echo "... if the gods are feeling benign... traffic sent to port $tor_server:$pfctl_to_docker should go through tor... trying to test - with"
+echo ""
+echo -e "\tcurl --proxy http://$tor_server:$pfctl_to_docker https://check.torproject.org/"
 echo ""
 
 curl --proxy http://$tor_server:$pfctl_to_docker https://check.torproject.org/ 2> /dev/null | grep -q Congratulations
@@ -175,44 +181,40 @@ if [ $? ]; then
     echo "congrats, looks good...!  https://check.torproject.org/ should corraborate"
     echo -e "\n\n"
 else
-    echo "buzz... after all this, you'd think it'd work, eh?  Sorry...."
+    echo "buzz... after all this, you'd think it'd work, eh?  Sorry.... bailin'"
+    exit 77
 fi
 
 
 echo
 echo FINALLY - setting sox proxy for BROWSERs in the System Settings
 echo
-# echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
-#
-#
+echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
+
 #
 INT=$(networksetup -listallnetworkservices | awk '!/\*/ {print $0; exit}')
 echo
-echo For interface: $INT
+echo For interface $INT - executing:
 echo
+networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
+echo networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
 echo
-# networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
-networksetup -setsocksfirewallproxy "$INT" localhost "$dtor_sox_outside"
+networksetup -setsocksfirewallproxy "$HW" localhost "$dtor_sox_outside"
 
-echo To stop using Tor et al, stop the running docker container:
-echo 
+echo
+echo To stop using Tor et al... execute the following commands to:
+echo - Kill off the running docker container:
+echo - Clear the pfctl rules with:
+echo - Remove the old pfctl configuration file
+echo - And finally kill off the socks network System Preferences
+echo
 echo -e "\tdocker stop $did"
-echo 
-echo Clear the pfctl rules with:
-echo
+echo -e "\tdocker rm   $did"
 echo -e "\tsudo pfctl -d && sudo pfctl -e"
-echo
-echo Remove the old pfctl configuration file
-echo
 echo -e "\trm $PFCTL"
-echo
-echo And finally kill off the socks network System Preferences
-echo
-# echo -e "\tnetworksetup -setsocksfirewallproxystate $HW off"
-echo -e "\tnetworksetup -setsocksfirewallproxystate "$INT" off"
+echo -e "\tnetworksetup -setsocksfirewallproxystate \"$HW\" off"
 echo
 echo "good luck!"
 echo
-
 
 

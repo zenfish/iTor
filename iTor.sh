@@ -225,13 +225,15 @@ echo To stop using Tor et al... execute the following commands to:
 echo - Kill off the running docker container:
 echo - Clear the pfctl rules with:
 echo - Remove the old pfctl configuration file
-echo - And finally kill off the socks network System Preferences
+echo - "And finally kill off the socks network System Preferences (if needed)"
 echo
 echo -e "\tdocker stop $did"
 echo -e "\tdocker rm   $did"
 echo -e "\tsudo pfctl -d && sudo pfctl -e"
 echo -e "\trm $PFCTL"
-echo -e "\tnetworksetup -setsocksfirewallproxystate \"$HW\" off"
+if [ "$REDIRECT_BROWSERS" = "yes" ]; then
+    echo -e "\tnetworksetup -setsocksfirewallproxystate \"$HW\" off"
+fi
 echo
 echo "good luck!"
 echo

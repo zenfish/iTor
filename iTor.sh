@@ -9,6 +9,14 @@
 # container name
 dtor_name="rdsubhas/tor-privoxy-alpine"
 
+# 
+# tries to muck with networksettings to make this work... set to non-yes to not do that
+#
+REDIRECT_BROWSERS="no"
+REDIRECT_BROWSERS="yes"
+
+REDIRECT="if you want to redirect browsers, ensure the \$REDIRECT_BROWSERS variable is set to 'yes'"
+
 # web proxy = 8118
 # sox = 9050
 dtor_web_outside="8118"
@@ -186,10 +194,21 @@ else
 fi
 
 
-echo
-echo FINALLY - setting sox proxy for BROWSERs in the System Settings
-echo
-echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
+if [ "$REDIRECT_BROWSERS" = "yes" ]; then
+    echo
+    echo FINALLY - setting sox proxy for BROWSERs in the System Settings
+    echo
+    echo "(networksetup -setsocksfirewallproxy $HW localhost $PORT)"
+    echo
+    echo "$REDIRECT"
+    echo
+else
+    echo
+    echo "NOT auto redirecting browsers via \`networksetup\`"
+    echo
+    echo "$REDIRECT"
+    echo
+fi
 
 #
 INT=$(networksetup -listallnetworkservices | awk '!/\*/ {print $0; exit}')

@@ -1,7 +1,10 @@
 A script - FOR MACs ONLY - that fires up Tor in a docker container, deals with details
 -----
 
-DO NOT RUN, lol. Still testing it out.
+This runs a Docker Tor container, then reroutes all traffic through the the Tor proxy.
+Mostly I was using it to change my IP, but it really does go through Tor.
+
+Still testing it out.
 
 If you do want to run it anyway... simply type -
 
@@ -45,13 +48,11 @@ working with curl like thus (this is done in the script, but...)
 
 I'm sure it'll keel over in all sorts of ways.
 
-
 TODO:
 
     - lots
 
     - properly deal with CIDRs that Tor shouldn't be seeing (e.g. 10/8, etc.)
-
 
 
 

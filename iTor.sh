@@ -186,7 +186,9 @@ curl --proxy http://$tor_server:$pfctl_to_docker https://check.torproject.org/ 2
 
 if [ $? ]; then
     echo -e "\n\n"
+    echo "congrats, looks good...!"
     echo "congrats, looks good...!  https://check.torproject.org/ should corraborate"
+    echo "congrats, looks good...!"
     echo -e "\n\n"
 else
     echo "buzz... after all this, you'd think it'd work, eh?  Sorry.... bailin'"

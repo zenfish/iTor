@@ -4,14 +4,17 @@ A script - FOR MACs ONLY - that fires up Tor in a docker container, deals with d
 This runs a Docker Tor container, then reroutes all traffic through the the Tor proxy.
 Mostly I was using it to change my IP, but it really does go through Tor.
 
-Still testing it out.
-
-If you do want to run it anyway... simply type -
+Simply type -
 
     ./iTor.sh
 
+Works on modernish macs, at least up to 10.15.
 
-Deets
+TLDR; under the hood, uses 'pfctl' to redirect traffic to a dockerized
+tor proxy running on port 5080. Not a real tor browser or anything, just
+abusing the proxy and semi-torrorizing.
+
+D33ts
 ----
 
 While checking out Jessie's nifty Linux docker Tor thing at -
@@ -21,8 +24,7 @@ While checking out Jessie's nifty Linux docker Tor thing at -
 I was internally lamenting how nothing works at all on a mac with
 networking and docker. But....
 
-
-This attempts to grab a Tor docker container - the nifty little one at:
+This attempts to grab a Tor docker container - the little one at:
 
     https://github.com/rdsubhas/docker-tor-privoxy-alpine
 
@@ -52,7 +54,7 @@ TODO:
 
     - lots
 
-    - properly deal with CIDRs that Tor shouldn't be seeing (e.g. 10/8, etc.)
+    - presumably/properly deal with CIDRs that Tor shouldn't be seeing (e.g. 10/8, etc.)
 
 
 
@@ -94,9 +96,9 @@ Here's what the script looks like when I run it -
     
     
     
+    congrats, looks good...!
     congrats, looks good...!  https://check.torproject.org/ should corraborate
-    
-    
+    congrats, looks good...!
     
     
     FINALLY - setting sox proxy for BROWSERs in the System Settings
@@ -120,8 +122,6 @@ Here's what the script looks like when I run it -
     	networksetup -setsocksfirewallproxystate Ethernet off
     
     good luck!
-
-
 
 
 
